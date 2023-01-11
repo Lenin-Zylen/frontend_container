@@ -11,7 +11,12 @@ const Routing = () => {
         {/* Public routes */}
         <Route path="/" element={<Home />} />
         <Route path="/appointment" element={<AppointmentFrontend />} />
+        <Route path="/appointment/create" element={<AppointmentFrontend />} />
+        <Route path="/appointment/edit" element={<AppointmentFrontend />} />
+
         <Route path="/patient" element={<PatientFrontend />} />
+        <Route path="/patient/create" element={<PatientFrontend />} />
+        <Route path="/patient/edit" element={<PatientFrontend />} />
 
         {/* Protected routes */}
 
