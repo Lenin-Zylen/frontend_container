@@ -5,14 +5,18 @@ import { createBrowserHistory } from "history";
 // import Layout from "../../components/Layouts/Layout/Layout";
 // import { isEmpty } from "lodash";
 // import { useNavigate } from "react-router-dom";
+import VerticalLayout from "../../components/VerticalLayout";
+
 const defaultHistory = createBrowserHistory();
 
 const PatientFrontend = () => {
-  const { REACT_APP_PATIENT_HOST: PatientHost } = process.env;
+  const { REACT_APP_PATIENT_HOST: patientHost } = process.env;
   // let navigate = useNavigate();
 
   function PatientModule({ history }) {
-    return <MicroFrontend history={history} host={PatientHost} name="patient" />;
+    return (
+      <MicroFrontend history={history} host={patientHost} name="patient" />
+    );
   }
 
   // useEffect(() => {
@@ -23,13 +27,13 @@ const PatientFrontend = () => {
   // }, [localStorage.getItem("user")]);
 
   return (
-    <>
-      <div id="patient">
-        <div>
+    <VerticalLayout>
+      <div className="page-content">
+        <div id="patient">
           <PatientModule history={defaultHistory} />
         </div>
       </div>
-    </>
+    </VerticalLayout>
   );
 };
 
