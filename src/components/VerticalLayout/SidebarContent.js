@@ -9,6 +9,7 @@ import MetisMenu from "metismenujs";
 
 //i18n
 import { useTranslation } from "react-i18next";
+import { get, isEmpty } from "lodash";
 
 const SidebarContent = (props) => {
   const ref = useRef();
@@ -16,7 +17,8 @@ const SidebarContent = (props) => {
 
   const location = useLocation();
 
-  console.log({ location });
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userType = get(user, "userType", "");
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
@@ -122,26 +124,17 @@ const SidebarContent = (props) => {
             <li className="menu-title">{t("Apps")}</li>
 
             <li>
-              <Link to="#" className=" ">
+              <a href="/patient" className=" ">
                 <i className="bx bx-calendar"></i>
-                <span>{t("Calendar")}</span>
-              </Link>
+                <span>{t("Patient")}</span>
+              </a>
             </li>
 
             <li>
-              <Link to="#" className="">
-                <i className="bx bx-chat"></i>
-                <span>{t("Chat")}</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="#" className="">
-                <i className="bx bx-file"></i>
-                <span className="badge rounded-pill bg-success float-end">
-                  {t("New")}
-                </span>
-                <span>{t("File Manager")}</span>
-              </Link>
+              <a href="/appointment" className="">
+                <i className="bx bx-calendar"></i>
+                <span>{t("Appointment")}</span>
+              </a>
             </li>
 
             <li>
@@ -177,146 +170,164 @@ const SidebarContent = (props) => {
               </ul>
             </li>
 
-            <li>
-              <Link to="/#" className="has-arrow ">
-                <i className="bx bx-bitcoin"></i>
-                <span>{t("Crypto")}</span>
-              </Link>
-              <ul className="sub-menu" aria-expanded="false">
+            {userType === "Admin" && (
+              <>
                 <li>
-                  <Link to="#">{t("Wallet")}</Link>
+                  <Link to="#" className="">
+                    <i className="bx bx-chat"></i>
+                    <span>{t("Chat")}</span>
+                  </Link>
                 </li>
                 <li>
-                  <Link to="#">{t("Buy/Sell")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Exchange")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Lending")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Orders")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("KYC Application")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("ICO Landing")}</Link>
-                </li>
-              </ul>
-            </li>
-
-            <li>
-              <Link to="/#" className="has-arrow ">
-                <i className="bx bx-envelope"></i>
-                <span>{t("Email")}</span>
-              </Link>
-              <ul className="sub-menu" aria-expanded="false">
-                <li>
-                  <Link to="#">{t("Inbox")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Read Email")} </Link>
-                </li>
-                <li>
-                  <Link to="/#">
-                    <span
-                      className="badge rounded-pill badge-soft-success float-end"
-                      key="t-new"
-                    >
+                  <Link to="#" className="">
+                    <i className="bx bx-file"></i>
+                    <span className="badge rounded-pill bg-success float-end">
                       {t("New")}
                     </span>
-                    <span key="t-email-templates">{t("Templates")}</span>
+                    <span>{t("File Manager")}</span>
+                  </Link>
+                </li>
+
+                <li>
+                  <Link to="/#" className="has-arrow ">
+                    <i className="bx bx-bitcoin"></i>
+                    <span>{t("Crypto")}</span>
                   </Link>
                   <ul className="sub-menu" aria-expanded="false">
                     <li>
-                      <Link to="#">{t("Basic Action")}</Link>
+                      <Link to="#">{t("Wallet")}</Link>
                     </li>
                     <li>
-                      <Link to="#">{t("Alert Email")} </Link>
+                      <Link to="#">{t("Buy/Sell")}</Link>
                     </li>
                     <li>
-                      <Link to="#">{t("Billing Email")} </Link>
+                      <Link to="#">{t("Exchange")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Lending")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Orders")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("KYC Application")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("ICO Landing")}</Link>
                     </li>
                   </ul>
                 </li>
-              </ul>
-            </li>
 
-            <li>
-              <Link to="/#" className="has-arrow ">
-                <i className="bx bx-receipt"></i>
-                <span>{t("Invoices")}</span>
-              </Link>
-              <ul className="sub-menu" aria-expanded="false">
                 <li>
-                  <Link to="#">{t("Invoice List")}</Link>
+                  <Link to="/#" className="has-arrow ">
+                    <i className="bx bx-envelope"></i>
+                    <span>{t("Email")}</span>
+                  </Link>
+                  <ul className="sub-menu" aria-expanded="false">
+                    <li>
+                      <Link to="#">{t("Inbox")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Read Email")} </Link>
+                    </li>
+                    <li>
+                      <Link to="/#">
+                        <span
+                          className="badge rounded-pill badge-soft-success float-end"
+                          key="t-new"
+                        >
+                          {t("New")}
+                        </span>
+                        <span key="t-email-templates">{t("Templates")}</span>
+                      </Link>
+                      <ul className="sub-menu" aria-expanded="false">
+                        <li>
+                          <Link to="#">{t("Basic Action")}</Link>
+                        </li>
+                        <li>
+                          <Link to="#">{t("Alert Email")} </Link>
+                        </li>
+                        <li>
+                          <Link to="#">{t("Billing Email")} </Link>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
                 </li>
-                <li>
-                  <Link to="#">{t("Invoice Detail")}</Link>
-                </li>
-              </ul>
-            </li>
 
-            <li>
-              <Link to="/#" className="has-arrow ">
-                <i className="bx bx-briefcase-alt-2"></i>
-                <span>{t("Projects")}</span>
-              </Link>
-              <ul className="sub-menu" aria-expanded="false">
                 <li>
-                  <Link to="#">{t("Projects Grid")}</Link>
+                  <Link to="/#" className="has-arrow ">
+                    <i className="bx bx-receipt"></i>
+                    <span>{t("Invoices")}</span>
+                  </Link>
+                  <ul className="sub-menu" aria-expanded="false">
+                    <li>
+                      <Link to="#">{t("Invoice List")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Invoice Detail")}</Link>
+                    </li>
+                  </ul>
                 </li>
-                <li>
-                  <Link to="#">{t("Projects List")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Project Overview")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Create New")}</Link>
-                </li>
-              </ul>
-            </li>
 
-            <li>
-              <Link to="/#" className="has-arrow ">
-                <i className="bx bx-task"></i>
-                <span>{t("Tasks")}</span>
-              </Link>
-              <ul className="sub-menu" aria-expanded="false">
                 <li>
-                  <Link to="#">{t("Task List")}</Link>
+                  <Link to="/#" className="has-arrow ">
+                    <i className="bx bx-briefcase-alt-2"></i>
+                    <span>{t("Projects")}</span>
+                  </Link>
+                  <ul className="sub-menu" aria-expanded="false">
+                    <li>
+                      <Link to="#">{t("Projects Grid")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Projects List")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Project Overview")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Create New")}</Link>
+                    </li>
+                  </ul>
                 </li>
-                <li>
-                  <Link to="#">{t("Kanban Board")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Create Task")}</Link>
-                </li>
-              </ul>
-            </li>
 
-            <li>
-              <Link to="/#" className="has-arrow ">
-                <i className="bx bxs-user-detail"></i>
-                <span>{t("Contacts")}</span>
-              </Link>
-              <ul className="sub-menu" aria-expanded="false">
                 <li>
-                  <Link to="#">{t("User Grid")}</Link>
+                  <Link to="/#" className="has-arrow ">
+                    <i className="bx bx-task"></i>
+                    <span>{t("Tasks")}</span>
+                  </Link>
+                  <ul className="sub-menu" aria-expanded="false">
+                    <li>
+                      <Link to="#">{t("Task List")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Kanban Board")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Create Task")}</Link>
+                    </li>
+                  </ul>
                 </li>
-                <li>
-                  <Link to="#">{t("User List")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Profile")}</Link>
-                </li>
-              </ul>
-            </li>
 
-            <li>
+                <li>
+                  <Link to="/#" className="has-arrow ">
+                    <i className="bx bxs-user-detail"></i>
+                    <span>{t("Contacts")}</span>
+                  </Link>
+                  <ul className="sub-menu" aria-expanded="false">
+                    <li>
+                      <Link to="#">{t("User Grid")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("User List")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Profile")}</Link>
+                    </li>
+                  </ul>
+                </li>
+
+                {/* <li>
               <Link to="/#" className="">
                 <span className="badge rounded-pill bg-success float-end">
                   {t("New")}
@@ -336,96 +347,44 @@ const SidebarContent = (props) => {
                   <Link to="#">{t("Blog Details")}</Link>
                 </li>
               </ul>
-            </li>
+            </li> */}
 
-            <li className="menu-title">Pages</li>
-            <li>
-              <Link to="/#" className="">
-                <i className="bx bx-user-circle"></i>
-                <span className="badge rounded-pill bg-success float-end">
-                  {t("New")}
-                </span>
-                <span>{t("Authentication")}</span>
-              </Link>
-              <ul className="sub-menu">
                 <li>
-                  <Link to="#">{t("Login")}</Link>
+                  <Link to="/#" className="has-arrow ">
+                    <i className="bx bx-file"></i>
+                    <span>{t("Utility")}</span>
+                  </Link>
+                  <ul className="sub-menu" aria-expanded="false">
+                    <li>
+                      <Link to="#">{t("Starter Page")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Maintenance")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Coming Soon")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Timeline")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("FAQs")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Pricing")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Error 404")}</Link>
+                    </li>
+                    <li>
+                      <Link to="#">{t("Error 500")}</Link>
+                    </li>
+                  </ul>
                 </li>
-                <li>
-                  <Link to="#">{t("Login 2")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Register")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Register 2")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Recover Password")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Recover Password 2")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Lock Screen")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Lock Screen 2")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Confirm Mail")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Confirm Mail 2")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Email Verification")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Email Verification 2")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Two Step Verification")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Two Step Verification 2")}</Link>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <Link to="/#" className="has-arrow ">
-                <i className="bx bx-file"></i>
-                <span>{t("Utility")}</span>
-              </Link>
-              <ul className="sub-menu" aria-expanded="false">
-                <li>
-                  <Link to="#">{t("Starter Page")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Maintenance")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Coming Soon")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Timeline")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("FAQs")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Pricing")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Error 404")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{t("Error 500")}</Link>
-                </li>
-              </ul>
-            </li>
+              </>
+            )}
 
-            <li className="menu-title">{t("Components")}</li>
+            {/* <li className="menu-title">{t("Components")}</li>
 
             <li>
               <Link to="/#" className="has-arrow ">
@@ -648,7 +607,7 @@ const SidebarContent = (props) => {
                   <Link to="#">{t("Leaflet Maps")}</Link>
                 </li>
               </ul>
-            </li>
+            </li> */}
 
             <li>
               <Link to="/#" className="has-arrow ">
@@ -668,7 +627,16 @@ const SidebarContent = (props) => {
                       <Link to="/#">{t("Level 2.1")}</Link>
                     </li>
                     <li>
-                      <Link to="/#">{t("Level 2.2")}</Link>
+                      <Link to="/#" className="has-arrow">
+                        {t("Level 2.2")}
+                      </Link>
+                      <ul className="sub-menu ms-4" aria-expanded="true">
+                        <li>
+                          <Link to="/#">{t("Level 2.2.1")}</Link>
+                          <Link to="/#">{t("Level 2.2.2")}</Link>
+                          <Link to="/#">{t("Level 2.2.3")}</Link>
+                        </li>
+                      </ul>
                     </li>
                   </ul>
                 </li>

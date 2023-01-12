@@ -19,6 +19,7 @@ import user1 from "../../../assets/images/users/avatar-1.jpg";
 const ProfileMenu = (props) => {
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const { t } = useTranslation();
 
@@ -56,7 +57,9 @@ const ProfileMenu = (props) => {
             src={user1}
             alt="Header Avatar"
           />
-          <span className="d-none d-xl-inline-block ms-2 me-1">{username}</span>
+          <span className="d-none d-xl-inline-block ms-2 me-1">
+            {user.firstName}
+          </span>
           <i className="mdi mdi-chevron-down d-none d-xl-inline-block" />
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
@@ -79,7 +82,7 @@ const ProfileMenu = (props) => {
             {t("Lock screen")}
           </DropdownItem>
           <div className="dropdown-divider" />
-          <Link to="/logout" className="dropdown-item">
+          <Link to="/" className="dropdown-item">
             <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger" />
             <span>{t("Logout")}</span>
           </Link>

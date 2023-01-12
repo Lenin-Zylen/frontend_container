@@ -13,7 +13,7 @@ const VerticalLayout = (props) => {
     setIsPreloader(true);
     setTimeout(() => {
       setIsPreloader(false);
-    }, 750);
+    }, 300);
   };
 
   const toggleMenuCallback = () => {

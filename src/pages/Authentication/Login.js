@@ -25,6 +25,7 @@ import * as Yup from "yup";
 import profile from "../../assets/images/profile-img.png";
 import logo from "../../assets/images/logo.svg";
 import lightlogo from "../../assets/images/logo-light.svg";
+import axios from "axios";
 
 class Login extends Component {
   constructor(props) {
@@ -71,6 +72,40 @@ class Login extends Component {
   };
 
   render() {
+    const BASE_API = process.env.REACT_APP_API_ENDPOINT;
+
+    const loginUser2 = async (values) => {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      try {
+        const res = await axios.post(
+          `${BASE_API}/users/authenticate`,
+          values,
+          config
+        );
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        if (res.data.userType === "Client") {
+          window.location.href = "/appointment";
+        } else {
+          window.location.href = "/patient";
+        }
+        return res;
+      } catch (error) {
+        console.error(error);
+        if (
+          typeof error.response.data === "undefined" ||
+          typeof error.response.data.message === "undefined"
+        ) {
+          console.error(error.message);
+        }
+        console.error(error.response.data.message);
+      }
+    };
+
     return (
       <React.Fragment>
         <div className="home-btn d-none d-sm-block">
@@ -145,7 +180,7 @@ class Login extends Component {
                           ),
                         })}
                         onSubmit={(values) => {
-                          this.props.loginUser(values, this.props.history);
+                          loginUser2(values);
                         }}
                       >
                         {({ errors, status, touched }) => (
